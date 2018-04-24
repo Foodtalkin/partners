@@ -1,0 +1,136 @@
+<div class="container-fluid container-fixed-lg">
+    <div class="row m-t-35">
+        <div class="col-sm-3">
+        	<div class="panel panel-transparent">
+                <div class="panel-body no-padding">
+                    <div id="portlet-advance" class="panel panel-default" pg-portlet on-refresh="refreshWithErrorTest('#portlet-advance')">
+                        <div class="panel-heading ">
+                            <div class="panel-title">Redeemptions
+                            </div>
+                            <div class="panel-controls">
+                                <ul>
+                                    <li><a href="" ng-click="GetRedeemFeed(redeemFeedUrl)" class="portlet-refresh"><i class="portlet-icon portlet-icon-refresh"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="height: calc(100vh - 260px); overflow-y: auto;">
+                            <div class="b-b b-transparent m-b-10" ng-repeat="redeemptions in redeemptions">
+                                <p class="fs-11 text-right hint-text bold">{{redeemptions.redeemed_on}}</p>
+                                <p style="display: block;" class="fs-14"><strong><span class="text-primary">{{ redeemptions.user_id }} - </span>{{redeemptions.user_name}}</strong> redeemed <strong>{{redeemptions.offers_redeemed}}</strong> coupon(s) of <strong>{{redeemptions.title}}</strong> offer at <strong>{{redeemptions.outlet_name}}, {{redeemptions.area}}</strong></p>
+                            </div>
+                            <h6 ng-click="GetNextPage(redeemFeedNextUrl, 'redeem')" class="text-center" style="cursor: pointer;"><i class="fa fa-chevron-down"></i></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-transparent">
+                <div class="panel-body no-padding">
+                    <div id="portlet-advance" class="panel panel-default" pg-portlet on-refresh="refreshWithErrorTest('#portlet-advance')">
+                        <div class="panel-heading ">
+                            <div class="panel-title">Purchases
+                            </div>
+                            <div class="panel-controls">
+                                <ul>
+                                    <li><a href="" ng-click="GetPurchaseFeed(purchaseFeedUrl)" class="portlet-refresh"><i class="portlet-icon portlet-icon-refresh"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="height: calc(100vh - 260px); overflow-y: auto;">
+                            <div class="b-b b-transparent m-b-10" ng-repeat="purchases in purchases">
+                                <p class="fs-11 text-right hint-text bold">{{purchases.purchased_on}}</p>
+                                <p style="display: block;" class="fs-14">
+                                    UserId
+                                    <strong>{{ purchases.id }}</strong>
+                                    <br>
+
+                                    New Paid User
+                                    <strong>{{purchases.name}}</strong>
+                                    <br>
+
+                                    Email:
+                                    <strong>{{purchases.email}}</strong>
+                                    <br>
+
+                                    Phone:
+                                    <strong>{{purchases.phone}}</strong>
+                                    <br>
+
+                                    Coupon:
+                                    <strong>{{purchases.coupon}}</strong>
+                                </p>
+                            </div>
+                            <h6 ng-click="GetNextPage(purchaseFeedNextUrl, 'purchase')" class="text-center" style="cursor: pointer;"><i class="fa fa-chevron-down"></i></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-transparent">
+                <div class="panel-body no-padding">
+                    <div id="portlet-advance" class="panel panel-default" pg-portlet on-refresh="refreshWithErrorTest('#portlet-advance')">
+                        <div class="panel-heading ">
+                            <div class="panel-title">Event Purchases
+                            </div>
+                            <div class="panel-controls">
+                                <ul>
+                                    <li><a href="" ng-click="GetEventPurchaseFeed(eventPurchaseFeedUrl)" class="portlet-refresh"><i class="portlet-icon portlet-icon-refresh"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="height: calc(100vh - 260px); overflow-y: auto;">
+                            <div class="b-b b-transparent m-b-10" ng-repeat="eventPurchase in eventPurchases">
+                                <p class="fs-11 text-right hint-text bold">{{eventPurchase.purchased_on}}</p>
+                                <p style="display: block;" class="fs-14">
+                                    Event: <strong>{{eventPurchase.title}}</strong> <br>
+                                    UserId: <strong>{{eventPurchase.id}}</strong><br>
+                                    User: <strong>{{eventPurchase.name}}</strong><br>
+                                    Email: <strong>{{eventPurchase.email}}</strong> <br>
+                                    Phone: <strong>{{eventPurchase.phone}}</strong> <br>
+                                    Amount: <strong>{{eventPurchase.txn_amount}}</strong>
+                                </p>
+                            </div>
+                            <h6 ng-click="GetNextPage(eventPurchaseFeedNextUrl, 'event-purchase')" class="text-center" style="cursor: pointer;"><i class="fa fa-chevron-down"></i></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-transparent">
+                <div class="panel-body no-padding">
+                    <div id="portlet-advance" class="panel panel-default" pg-portlet on-refresh="refreshWithErrorTest('#portlet-advance')">
+                        <div class="panel-heading ">
+                            <div class="panel-title">Signups
+                            </div>
+                            <div class="panel-controls">
+                                <ul>
+                                    <li><a href="" ng-click="GetSignupFeed(signupFeedUrl)" class="portlet-refresh"><i class="portlet-icon portlet-icon-refresh"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="height: calc(100vh - 260px); overflow-y: auto;">
+                            <div class="b-b b-transparent m-b-10" ng-repeat="signups in signups">
+                                <p class="fs-11 text-right hint-text bold">{{signups.signup_on}}</p>
+                                <p style="display: block;" class="fs-14">
+                                    New User <strong>{{signups.name}}</strong><br>
+                                    UserId: <strong>{{signups.id}}</strong><br>
+                                    Status: <strong class="{{signups.status == 'paid'? 'text-success' : (signups.status == 'trial'? 'text-warning' : 'text-danger')}}">{{signups.status}}</strong> <br>
+                                    Email: <strong>{{signups.email}}</strong><br>
+                                    Phone: <strong>{{signups.phone}}</strong>
+                                </p>
+                            </div>
+                            <h6 ng-click="GetNextPage(signupFeedNextUrl, 'signup')" class="text-center" style="cursor: pointer;"><i class="fa fa-chevron-down"></i></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,281 @@
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+        <div class="col-md-4" style="border-right: 1px solid rgba(230, 230, 230, 0.7); height: calc(100vh - 135px);">
+            <div class="p-t-30 p-b-10">
+                <button class="btn btn-primary btn-block" ng-click="openCreateform()">Create New Coupon</button>
+                <h5>Coupon List</h5>
+                <div class="form-group">
+                   <input type="text" ng-model="searchTerm" class="form-control" placeholder="serach...">
+                </div>
+            </div>
+            <!-- Restro List -->
+            <div class="p-t-20 p-b-20 scrollable" style="height: calc(100% - 170px);">
+                
+                <button class="btn btn-white btn-block text-left" ng-repeat="listitem in (allList | filter:searchTerm)" style="overflow: hidden;text-overflow: ellipsis;" ng-click="OpenDetails(listitem.id)">{{listitem.code}} : {{ listitem.discount }}%</button>
+                <h6 ng-click="nextPage(NextUrl)" class="text-center" style="cursor: pointer;"><i class="fa fa-chevron-down"></i></h6>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="col-xs-12 m-t-40" ng-hide="hideForm">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="panel panel-transparent">
+                        <div class="panel-body no-padding">
+                            <div id="portlet-advance" class="panel panel-default" pg-portlet on-refresh="refreshWithErrorTest('#portlet-advance')">
+                                <div class="panel-heading ">
+                                    <div class="panel-title">Create Coupon
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <form name="newCoupon" id="form-Coupon" role="form" novalidate>
+                                        <div class="row clearfix">
+                                            <div class="col-sm-12">
+                                                <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : newCoupon.couponCode.$invalid && !newCoupon.couponCode.$pristine }">
+                                                    <label>Coupon Code</label>
+                                                    <input type="text" class="form-control" name="couponCode" placeholder="Code" ng-model="Coupon.couponCode" required>
+                                                </div>
+                                                <label class="error" for="couponCode" ng-show="newCoupon.couponCode.$invalid && !newCoupon.couponCode.$pristine">This field is required.</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : newCoupon.description.$invalid && !newCoupon.description.$pristine }">
+                                                    <label>Description</label>
+                                                    <textarea class="form-control" rows="5" name="description" placeholder="Coupon Description" ng-model="Coupon.description" required></textarea>
+                                                </div>
+                                                <label class="error" for="one_liner" ng-show="newCoupon.description.$invalid && !newCoupon.description.$pristine">This field is required.</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : newCoupon.discount.$invalid && !newCoupon.discount.$pristine }">
+                                                    <label>discount</label>
+                                                    <input type="number" class="form-control" placeholder="Discount Rate" id="discount-rate" ng-model="Coupon.discount" name="discount">
+                                                </div>
+                                                <label class="error" for="date" ng-show="newCoupon.discount.$invalid && !newCoupon.discount.$pristine">This field is required.</label>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : newCoupon.duration.$invalid && !newCoupon.duration.$pristine }">
+                                                    <label>Duration</label>
+                                                    <input type="number" class="form-control" placeholder="Duration in Month" id="discount-rate" ng-model="Coupon.duration" name="duration">
+                                                </div>
+                                                <label class="error" for="date" ng-show="newCoupon.duration.$invalid && !newCoupon.duration.$pristine">This field is required.</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : newCoupon.qty.$invalid && !newCoupon.qty.$pristine }">
+                                                    <label>quantity</label>
+                                                    <input type="number" class="form-control" placeholder="how many time this coupon use" id="qty" ng-model="Coupon.qty" name="discount">
+                                                </div>
+                                                <label class="error" for="date" ng-show="newCoupon.qty.$invalid && !newCoupon.qty.$pristine">This field is required.</label>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div pg-form-group class="form-group form-group-default input-group required" ng-class="{ 'has-error' : newCoupon.expire_at.$invalid && !newCoupon.expire_at.$pristine }">
+                                                    <label>Expire Date</label>
+                                                    <input type="text" class="form-control" placeholder="Coupon Expire Date" id="datepicker-component2" ui-jq="datepicker" required ng-model="Coupon.expire_at" data-date-format="yyyy-mm-dd" name="expire_at" >
+                                                    <span class="input-group-addon">
+                                                      <i class="fa fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <label class="error" for="date" ng-show="newCoupon.expire_at.$invalid && !newCoupon.expire_at.$pristine">This field is required.</label>
+                                                <label class="error" for="date" ng-show="newCoupon.expire_at.$error.minlength">date should have at least 4 characters</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : newCoupon.note.$invalid && !newCoupon.note.$pristine }">
+                                                    <label>Notes</label>
+                                                    <textarea class="form-control" rows="5" name="note" placeholder="Coupon notes" ng-model="Coupon.note" required></textarea>
+                                                </div>
+                                                <label class="error" for="one_liner" ng-show="newCoupon.note.$invalid && !newCoupon.note.$pristine">This field is required.</label>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <button class="btn btn-primary" type="submit" ng-disabled="(newCoupon.$invalid) || (isDisabled)" ng-click="createCoupon()">Create Coupon</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12" ng-show="hideForm">
+                <div class="row">
+                    <div class="col-xs-12 col-md-10 col-md-offset-1" ng-hide="editDetails">
+                        <div class="col-sm-12">
+                            <div class="m-t-40 m-l-15">
+                                <p class="hint-text m-t-0 m-b-5 bold fs-13">Code</p>
+                                <h5>{{ couponDetails.code }}</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="m-t-20 m-l-15">
+                                <p class="hint-text m-t-0 m-b-5 bold fs-13">Description</p>
+                                <p>{{ couponDetails.description}}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-6">
+                                <div class="m-t-20">
+                                    <p class="hint-text m-t-0 m-b-5 bold fs-13">Discount</p>
+                                    <h5>{{ couponDetails.discount }}</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="m-t-20">
+                                    <p class="hint-text m-t-0 m-b-5 bold fs-13">Duration</p>
+                                    <h5>{{ couponDetails.duration}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-6">
+                                <div class="m-t-20">
+                                    <p class="hint-text m-t-0 m-b-5 bold fs-13">Quantity</p>
+                                    <h5>{{ couponDetails.qty }}</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="m-t-20">
+                                    <p class="hint-text m-t-0 m-b-5 bold fs-13">Expire At</p>
+                                    <h5>{{ couponDetails.expire_at }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="m-t-20 m-l-15">
+                                <p class="hint-text m-t-0 m-b-5 bold fs-13">Notes</p>
+                                <p>{{ couponDetails.note}}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <button class="btn btn-primary" ng-click="openedit()">Edit Coupon</button>
+                            <button class="btn btn-danger pull-right" ng-click="deleteCoupon(couponDetails.id)" ng-disabled="couponDetails.is_disabled">Delete Coupon</button>
+                        </div>
+                        <div class="col-xs-12">
+                            <hr />
+                        </div>
+                        <div class="col-xs-12">
+                            <p class="hint-text m-t-0 m-b-5 bold fs-13">Redeemed Users List</p>
+                        </div>
+                        <div class="col-sm-12">
+                            <table class="table table-hover" id="basicTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width:10%">Id</th>
+                                        <th style="width:25%">Name</th>
+                                        <th style="width:35%">Phone</th>
+                                        <th style="width: 30%">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="user in couponDetails.users">
+                                        <td class="v-align-middle">
+                                            <p>{{ user.id }}</p>
+                                        </td>
+                                        <td class="v-align-middle">
+                                            <p>{{ user.name }}</p>
+                                        </td>
+                                        <td class="v-align-middle">
+                                            <p>{{ user.phone }}</p>
+                                        </td>
+                                        <!--<td class="v-align-middle">
+                                          <p>{{ subEvent.order_id }}</p>
+                                        </td>-->
+                                        <td class="v-align-middle">
+                                            <p>{{ user.created_at }}</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 m-t-40" ng-show="editDetails">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="panel panel-transparent">
+                                <div class="panel-body no-padding">
+                                    <div id="portlet-advance" class="panel panel-default" pg-portlet on-refresh="refreshWithErrorTest('#portlet-advance')">
+                                        <div class="panel-heading ">
+                                            <div class="panel-title">Edit Coupon
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            <form name="couponEdit" id="form-couponEdit" role="form" novalidate>
+                                                <div class="row clearfix">
+                                                    <div class="col-sm-12">
+                                                        <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : couponEdit.couponCode.$invalid && !couponEdit.couponCode.$pristine }">
+                                                            <label>Coupon Code</label>
+                                                            <input type="text" class="form-control" name="couponCode" placeholder="Code" ng-model="couponDetails.code" required>
+                                                        </div>
+                                                        <label class="error" for="couponCode" ng-show="couponEdit.couponCode.$invalid && !couponEdit.couponCode.$pristine">This field is required.</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : couponEdit.description.$invalid && !couponEdit.description.$pristine }">
+                                                            <label>Description</label>
+                                                            <textarea class="form-control" rows="5" name="description" placeholder="Coupon Description" ng-model="couponDetails.description" required></textarea>
+                                                        </div>
+                                                        <label class="error" for="one_liner" ng-show="couponEdit.description.$invalid && !couponEdit.description.$pristine">This field is required.</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : couponEdit.discount.$invalid && !couponEdit.discount.$pristine }">
+                                                            <label>discount</label>
+                                                            <input type="number" class="form-control" placeholder="Discount Rate" id="discount-rate" ng-model="couponDetails.discount" name="discount">
+                                                        </div>
+                                                        <label class="error" for="date" ng-show="couponEdit.discount.$invalid && !couponEdit.discount.$pristine">This field is required.</label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : couponEdit.duration.$invalid && !couponEdit.duration.$pristine }">
+                                                            <label>Duration</label>
+                                                            <input type="number" class="form-control" placeholder="Duration in Month" id="discount-rate" ng-model="couponDetails.duration" name="duration">
+                                                        </div>
+                                                        <label class="error" for="date" ng-show="couponEdit.duration.$invalid && !couponEdit.duration.$pristine">This field is required.</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : couponEdit.qty.$invalid && !couponEdit.qty.$pristine }">
+                                                            <label>quantity</label>
+                                                            <input type="number" class="form-control" placeholder="how many time this coupon use" id="qty" ng-model="couponDetails.qty" name="discount">
+                                                        </div>
+                                                        <label class="error" for="date" ng-show="couponEdit.qty.$invalid && !couponEdit.qty.$pristine">This field is required.</label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div pg-form-group class="form-group form-group-default input-group required" ng-class="{ 'has-error' : couponEdit.expire_at.$invalid && !couponEdit.expire_at.$pristine }">
+                                                            <label>Expire Date</label>
+                                                            <input type="text" class="form-control" placeholder="Coupon Expire Date" id="datepicker-component2" ui-jq="datepicker" required ng-model="couponDetails.expire_at" data-date-format="yyyy-mm-dd" name="expire_at" >
+                                                            <span class="input-group-addon">
+                                                      <i class="fa fa-calendar"></i>
+                                                    </span>
+                                                        </div>
+                                                        <label class="error" for="date" ng-show="couponEdit.expire_at.$invalid && !couponEdit.expire_at.$pristine">This field is required.</label>
+                                                        <label class="error" for="date" ng-show="couponEdit.expire_at.$error.minlength">date should have at least 4 characters</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : couponEdit.note.$invalid && !couponEdit.note.$pristine }">
+                                                            <label>Notes</label>
+                                                            <textarea class="form-control" rows="5" name="note" placeholder="Coupon notes" ng-model="couponDetails.note" required></textarea>
+                                                        </div>
+                                                        <label class="error" for="one_liner" ng-show="couponEdit.note.$invalid && !couponEdit.note.$pristine">This field is required.</label>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <button class="btn btn-danger" ng-click="stopedit()">cancel</button>
+                                                <button class="btn btn-primary" type="submit" ng-disabled="couponEdit.$invalid" ng-click="editCoupon(couponDetails.id)">Edit Coupon</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,166 @@
+<div class="container-fluid container-fixed-lg" style="">
+   <div class="row">
+       <div class="col-sm-3" style="border-right: 1px solid rgba(230, 230, 230, 0.7); height: calc(100vh - 135px); position: sticky; top: 64px;">
+           <div class="p-t-30 p-b-10">
+               <button class="btn btn-primary btn-block" ui-sref="app.createxperience">Create New Experience</button>
+               <h5>Experience List</h5>
+               <div class="form-group">
+                   <input type="text" ng-model="searchTerm" class="form-control" placeholder="search...">
+               </div>
+           </div>
+           <!-- Experience List -->
+           <div class="p-t-20 p-b-20 scrollable" style="height: calc(100% - 170px);">
+               <button class="btn btn-white btn-block text-left" ng-repeat="event in filtered = (EventList | filter:searchTerm | orderBy:'start_time')" style="overflow: hidden;text-overflow: ellipsis;" ng-click="OpenEvent(event.id)">{{ event.title }} <span class="pull-right {{event.is_active == '0' ?  '' : 'hide'}}"><i class="fa fa-ban text-danger"></i></span></button>
+               <h6 ng-click="nextListPage(nextPage)" class="text-center" style="cursor: pointer;"><i class="fa fa-chevron-down"></i></h6>
+           </div>
+       </div>
+       <div class="col-sm-9">
+          <div class="row" ng-hide="showEvent">
+            <div class="col-sm-12">
+              <div style="height: calc(100vh - 170px); position: relative;">
+                <div style="position: absolute; top:50%; left: 50%; transform: translate(-50%, -50%);">
+                  <h3 class="text-center">Click On Event to see details</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-show="showEvent">
+            <!-- action bar -->
+            <div class="col-sm-12">
+              <div class="btn-group m-t-20 pull-right">
+                  <button type="button" class="btn btn-success" ng-csv="usercsv" filename="{{experience.title}}-GuestList.csv" field-separator="," decimal-separator="." title="download csv"><i class="fa fa-download"></i>
+                  </button>
+                  <button type="button" class="btn {{experience.is_active == '1' ?  'btn-danger' : 'btn-success'}}" title="{{experience.is_active == '1' ?  'Hide Event' : 'Show event'}}" ng-click="showHideExperience(experience.id, experience.is_active)" ng-disabled="isDisabled"><i class="fa fa-power-off"></i>
+                  </button>
+                  <button type="button" class="btn btn-success" ng-click="editOpen()"><i class="fa fa-pencil"></i>
+                  </button>
+                  <button type="button" class="btn btn-success" ng-click="deleteExperience(experience.id)"><i class="fa fa-trash-o"></i>
+                  </button>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <h5>{{experience.title}} is currently <strong>{{experience.is_active == '1' ?  'Live' : 'Hidden'}}</strong> on App</h5>
+            </div>
+            <div class="col-sm-4" ng-hide="bigTable">
+              <div class="col-sm-12">
+                <h5>Card</h5>
+                <div class="card share share-other col no-t-b-border" data-social="item">
+                  <div class="card-content">
+                    <button class="btn btn-danger pull-right top-right m-r-10 m-t-10 btn-sm">{{experience.tag}}</button>
+                    <img alt="Card Image" ng-src="{{experience.cover_image}}" class="border-t-radius">
+                    <div class="card-description">
+                      <h5 class="bold">{{experience.title}}</h5>
+                    </div>
+                  </div>
+                  <div class="card-footer clearfix">
+                    <div class="fs-12 semi-bold m-t-5"><i class="fa fa-clock-o m-r-5" aria-hidden="true"></i> {{experience.display_time}}</div>
+                    <div class="fs-12 semi-bold m-t-5"><i class="fa fa-map-marker m-r-5" aria-hidden="true"></i> {{experience.address}}</div>
+                    <div class="fs-13 bold m-t-5"><i class="fa fa-inr m-r-5" aria-hidden="true"></i>  {{experience.cost}}</div>
+
+                  </div>
+                  <a class="btn btn-block btn-success btn-lg" style="border-radius: 0 0 2px 2px;">View Details</a>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <h5>Open Details</h5>
+                <div class="card share share-other col no-t-b-border" data-social="item">
+                  <div class="card-content">
+                    <button class="btn btn-danger pull-right top-right m-r-10 m-t-10 btn-sm">{{experience.tag}}</button>
+                    <img alt="Card Image" ng-src="{{experience.cover_image}}" class="border-t-radius">
+                    <div class="card-description bg-master-dark text-white p-b-10">
+                      <h5 class="bold text-white">{{experience.title}}</h5>
+                      <div class="fs-12 semi-bold m-t-5"><i class="fa fa-clock-o m-r-5" aria-hidden="true"></i> {{experience.display_time}}</div>
+                      <div class="fs-12 semi-bold m-t-5"><i class="fa fa-map-marker m-r-5" aria-hidden="true"></i> {{experience.address}}</div>
+                      <div class="fs-13 bold m-t-5"><i class="fa fa-inr m-r-5" aria-hidden="true"></i>  {{experience.cost}}</div>
+                    </div>
+                  </div>
+                  <div class="card-footer clearfix no-padding">
+                    <div class="col-sm-12 no-padding" ng-repeat="item in experience.data">
+                      <experience-data class="col-sm-12" type="{{item.type}}" item="item"></experience-data>
+                    </div>
+
+                  </div>
+                  <a class="btn btn-block btn-success btn-lg" ui-sref="open({id : experience.id, sessionid : sessionid})" style="border-radius: 0 0 2px 2px;">View Details</a>
+                </div>
+              </div>
+            </div>
+            <div class=" {{bigTable ? 'col-sm-12' : 'col-sm-8'}}" >
+              <div class="panel panel-transparent">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                      Guest List
+                      <button class="btn btn-default" ng-click="bigTable = !bigTable"><i class="fa fa-arrows-alt"></i></button>
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover demo-table-dynamic">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Tickets</th>
+                                <th>Source</th>
+                                <th>Non-veg</th>
+                                <th>Transection Id</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="guest in guestList">
+                                <td class="v-align-middle">
+                                    <p>{{guest.name}}</p>
+                                </td>
+                                <td class="v-align-middle">
+                                    <p>{{guest.total_tickets}}</p>
+                                </td>
+                                <td class="v-align-middle">
+                                    <p ng-if="guest.channel == 'WAP'">APP</p>
+                                    <p ng-if="guest.channel == 'WEB'">WEB</p>
+                                </td>
+                                <td class="v-align-middle">
+                                    <p>{{guest.non_veg}}</p>
+                                </td>
+                                <td class="v-align-middle">
+                                    <p>{{guest.txn_id}}</p>
+                                </td>
+                                <td class="v-align-middle">
+                                    <p>{{guest.email}}</p>
+                                </td>
+                                <td class="v-align-middle">
+                                    <p>{{guest.phone}}</p>
+                                </td>
+                                <td>
+                                  <button class="btn btn-warning" ng-show="guest.refunded == '1' ? false : true" ng-click="initiateRefund(guest.txn_id)">Initiate Refund</button>
+                                  <button class="btn btn-complete" ng-show="guest.refunded == '0' ? false : true" ng-click="refundStatus(guest.txn_id)">Refund Status</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+          </div>
+       </div>
+   </div>
+</div>
+
+<div class="modal fade slide-up disable-scroll" id="modalSlideUpSmall" tabindex="-1" role="dialog" aria-hidden="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content-wrapper">
+            <div class="modal-content">
+                <div class="modal-body text-center m-t-20">
+
+                    <h4 class="no-margin p-b-10">{{refundDetails.RESPMSG}}</h4>
+                    <p>Refund Date : {{refundDetails.REFUNDDATE}}</p>
+                    <p>Refund Amount : {{refundDetails.REFUNDAMOUNT}}</p>
+
+                    <button type="button" class="btn btn-primary btn-cons" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>

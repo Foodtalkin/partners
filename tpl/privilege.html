@@ -1,0 +1,632 @@
+
+<div class="container-fluid container-fixed-lg" style="">
+   <div class="row">
+       <div class="col-md-4" style="border-right: 1px solid rgba(230, 230, 230, 0.7); height: calc(100vh - 135px);">
+           <div class="p-t-30 p-b-10">
+               <button class="btn btn-primary btn-block" ng-click="openCreateform()">Create New Restaurant</button>
+               <h5>Restaurant List</h5>
+               <div class="form-group">
+                   <input type="text" ng-model="searchTerm" class="form-control" placeholder="serach...">
+               </div>
+           </div>
+           <!-- Restro List -->
+           <div class="p-t-20 p-b-20 scrollable" style="height: calc(100% - 170px);">
+                
+               <button class="btn btn-white btn-block text-left" ng-repeat="restro in filtered = (restroList | filter:searchTerm | orderBy:'name')" style="overflow: hidden;text-overflow: ellipsis;" ng-click="OpenRestro(restro.id)">{{ restro.name }}
+               <span class="pull-right {{restro.is_disabled == '0' ? 'hide': ''}}">
+                 <i class="fa fa-ban text-danger"></i>
+               </span>
+               </button>
+           </div>
+       </div>
+       <div class="col-md-8">
+            <!-- form create-->
+           <div class="col-sm-10 col-sm-offset-1 p-t-10 p-b-30" ng-show="showForm">
+              <!-- create Restaurant Form -->
+              <div class="col-xs-12" ng-show="form1">
+                <h2 ng-hide="editing">Create New Restaurant</h2>
+                <h2 ng-show="editing">Update Restaurant</h2>
+                <form name="CreateNewRestro" id="form-CreateNewRestro" role="form" novalidate>
+                    <div class="row clearfix">
+                        <div class="col-sm-8">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : CreateNewRestro.name.$invalid && !CreateNewRestro.name.$pristine }">
+                                <label>Restaurant Name</label>
+                                <input type="text" class="form-control" name="name" ng-model="restro.name" required>
+                            </div>
+                            <label class="error" for="name" ng-show="CreateNewRestro.name.$invalid && !CreateNewRestro.name.$pristine">This field is required.</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div pg-form-group class="form-group form-group-default input-group required" ng-class="{ 'has-error' : CreateNewRestro.cost.$invalid && !CreateNewRestro.cost.$pristine }">
+                                <label>Cost</label>
+                                <input type="text" class="form-control" name="cost" placeholder="700" ng-model="restro.cost" required>
+                                <span class="input-group-addon">
+                                                   For one
+                                </span>
+                            </div>
+                            <label class="error" for="cost" ng-show="CreateNewRestro.cost.$invalid && !CreateNewRestro.cost.$pristine">This field is required.</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : CreateNewRestro.one_liner.$invalid && !CreateNewRestro.one_liner.$pristine }">
+                                <label>One Liner</label>
+                                <input type="text" class="form-control" name="one_liner" placeholder="Maximum of 80 characters." ng-model="restro.one_liner" required maxlength="80">
+                            </div>
+                            <label class="error" for="one_liner" ng-show="CreateNewRestro.one_liner.$invalid && !CreateNewRestro.one_liner.$pristine">This field is required.</label>
+                            <label class="error" for="one_liner" ng-show="CreateNewRestro.one_liner.$error.minlength">One Liner should have at least 4 characters</label>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="direct_upload" 
+                            ngf-drop="uploadFiles($files)"
+                            ngf-drag-over-class="dragOverClass($event)"
+                            ng-model="files"
+                            ng-multiple="fasle" ngf-dimensions="$width == 400 && $height == 400">
+                            <div class="col-md-12 no-padding">
+                              <form>  
+                                <div class="form_line">
+                                    <!-- <label>Image:</label> -->
+                                    <div class="form_controls">
+                                        <div class="upload_button_holder" style="text-align: center; border: 1px dotted #9e9e9e;padding: 20px;width: 100%;">
+                                            <div href="#" class="upload_button btn btn-fw btn-primary" ngf-select="uploadFiles($files)" title="upload" resetOnClick="true" ngf-dimensions="$width == 400 && $height == 400">Upload</div>
+                                        </div>
+                                    </div>
+                                </div>
+                              </form>
+                            </div>
+                            <div class="col-sm-12 p-t-20">
+                              <div ng-repeat="file in files">
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width:{{file.progress}}%"></div>
+                                        </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>                  
+                    <div class="clearfix"></div>
+                    <button class="btn btn-default m-t-30" ng-click="hideForms()">Cancel</button>
+                    <button class="btn btn-primary pull-right m-t-30" type="button" ng-click="createRestro()" ng-hide="editing" ng-disabled="(CreateNewRestro.$invalid) || (cover == '')">Create a new Restaurant</button>
+                    <button class="btn btn-primary pull-right m-t-30" ng-show="editing" ng-click="updateRestro()">Update</button>
+                </form>
+              </div>
+              <!-- add Cuisine -->
+              <div class="col-xs-12 m-t-50" ng-show="form2">
+                <div class="col-sm-12">
+                  <h2>Add Cuisine</h2>
+                  <ui-select multiple ng-model="Currunt.cuisineList" theme="select2" ng-disabled="disabled" style="width: 100%;border:1px solid #9e9e9e;">
+                      <ui-select-match placeholder="Select cuisine...">{{$item.title}}</ui-select-match>
+                      <ui-select-choices repeat="cuisine in cuisineList | filter:$select.search">
+                          {{cuisine.title}}
+                      </ui-select-choices>
+                  </ui-select>
+                </div>
+                <div class="col-sm-12 m-t-30">
+                  <button class="btn btn-default m-t-20" ng-click="hideForms()">Cancel</button>
+                  <button class="btn btn-primary m-t-20 pull-right" ng-click="addCuisine()">Add Cuisine</button>
+                </div>
+              </div>
+              <!-- make primary -->
+              <div class="col-xs-12 m-t-50" ng-show="form3">
+                <h2>Primary cuisine</h2>
+                <div class="col-sm-12">
+                  <div pg-form-group class="form-group form-group-default" ng-class="{ 'has-error' : newNoti.eventid.$invalid && !newNoti.eventid.$pristine }">
+                      <label>Primary Cuisine</label>
+                      <select class="cs-select cs-skin-slide" ng-model="Currunt.primary" cs-select>
+                        <option ng-repeat="cuisine in Currunt.cuisineList" value="{{cuisine.id}}" style="background: #fff; border:0px solid rgba(0, 0, 0, 0.07); width: 100%">{{cuisine.title}}</option>
+                      </select>
+                  </div>
+                      
+                </div>
+                <div class="col-sm-12">
+                  <button class="btn btn-default m-t-30" ng-click="hideForms()">Cancel</button>
+                  <button class="btn btn-primary m-t-30 pull-right" ng-click="makePrimaryCuisine()">Make Primary</button>
+                </div>
+              </div>
+              <!-- create Outlet -->
+              <div class="col-xs-12" ng-show="form4">
+                <h2 ng-hide="editing">Create Outlet</h2>
+                <h2 ng-show="editing">Update Outlet</h2>
+                <form name="createOutletform" id="form-createOutletform" role="form" novalidate>
+                    <div class="row clearfix">
+                        <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOutletform.name.$invalid && !createOutletform.name.$pristine }">
+                                <label>Name</label>
+                                <input type="text" class="form-control" name="name" ng-model="Currunt.outlet.name" required>
+                            </div>
+                            <label class="error" for="name" ng-show="createOutletform.name.$invalid && !createOutletform.name.$pristine">This field is required.</label>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOutletform.work_hours.$invalid && !createOutletform.work_hours.$pristine }">
+                                <label>Work Hours</label>
+                                <input type="text" class="form-control" name="work_hours" ng-model="Currunt.outlet.work_hours" required>
+                            </div>
+                            <label class="error" for="work_hours" ng-show="createOutletform.work_hours.$invalid && !createOutletform.work_hours.$pristine">This field is required.</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-8">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOutletform.email.$invalid && !createOutletform.email.$pristine }">
+                                <label>Email Address (multiple saprated by ,)</label>
+                                <input type="text" class="form-control" name="email" ng-model="Currunt.outlet.email" required>
+                            </div>
+                            <label class="error" for="email" ng-show="createOutletform.email.$invalid && !createOutletform.email.$pristine">This field is required.</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOutletform.phone.$invalid && !createOutletform.phone.$pristine }">
+                                <label>Phone</label>
+                                <input type="text" class="form-control" name="phone" ng-model="Currunt.outlet.phone" required>
+                            </div>
+                            <label class="error" for="phone" ng-show="createOutletform.phone.$invalid && !createOutletform.phone.$pristine">This field is required.</label>
+                        </div>
+                    </div>
+                    <div class="row p-t-5 p-b-5">
+                      <div class="col-sm-6">
+                          <label for="">City</label>
+                          <select class="cs-select cs-skin-slide" ng-change="selectCityChange()" ng-model="Currunt.outlet.city_id" >
+                            <option value=""> --select city-- </option>
+                            <option value="1">Delhi NCR</option>
+                            <option value="2">Mumbai</option>
+                          </select>
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="">City Zone</label>
+                          <select class="cs-select cs-skin-slide" ng-model="Currunt.outlet.city_zone_id" ng-options="zone.id as zone.name for zone in zonelist" cs-select>
+                          <!--   
+                             <option value=""> select city zone</option>
+                            <option ng-repeat="zone in zonelist" ng-value="{{zone.id}}">{{zone.name}}</option>-->
+                          </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOutletform.postcode.$invalid && !createOutletform.postcode.$pristine }">
+                                <label>Postcode</label>
+                                <input type="text" class="form-control" name="postcode" ng-model="Currunt.outlet.postcode" required>
+                            </div>
+                            <label class="error" for="postcode" ng-show="createOutletform.postcode.$invalid && !createOutletform.postcode.$pristine">This field is required.</label>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group ">
+                              <label>Area</label>
+                              <ui-select ng-model="Currunt.outlet.area" theme="bootstrap">
+                                  <ui-select-match placeholder="Select or search for area in the list...">{{$select.selected}}</ui-select-match>
+                                  <ui-select-choices repeat="area in arealist | filter: $select.search">{{area}}
+                                      <!-- <div ng-bind-html="trustAsHtml((area | highlight: $select.search))"></div> -->
+                                  </ui-select-choices>
+                              </ui-select>
+                              
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOutletform.latitude.$invalid && !createOutletform.latitude.$pristine }">
+                                <label>Latitude</label>
+                                <input type="text" class="form-control" name="latitude" ng-model="Currunt.outlet.latitude" required>
+                            </div>
+                            <label class="error" for="latitude" ng-show="createOutletform.latitude.$invalid && !createOutletform.latitude.$pristine">This field is required.</label>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOutletform.longitude.$invalid && !createOutletform.longitude.$pristine }">
+                                <label>Longitude</label>
+                                <input type="text" class="form-control" name="longitude" ng-model="Currunt.outlet.longitude" required>
+                            </div>
+                            <label class="error" for="longitude" ng-show="createOutletform.longitude.$invalid && !createOutletform.longitude.$pristine">This field is required.</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOutletform.address.$invalid && !createOutletform.address.$pristine }">
+                                <label>Address</label>
+                                <!-- <input type="text" class="form-control" name="address" placeholder="Maximum of 80 characters." ng-model="Currunt.outlet.address" required maxlength="80"> -->
+                                <textarea class="form-control" name="address" placeholder="address" ng-model="Currunt.outlet.address" required style="height: 50px;"></textarea>
+                            </div>
+                            <label class="error" for="address" ng-show="createOutletform.address.$invalid && !createOutletform.address.$pristine">This field is required.</label>
+                            <label class="error" for="address" ng-show="createOutletform.address.$error.minlength">One Liner should have at least 4 characters</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOutletform.suggested_dishes.$invalid && !createOutletform.suggested_dishes.$pristine }">
+                                <label>Suggested Dishes</label>
+                                <!-- <input type="text" class="form-control" name="suggested_dishes" placeholder="Maximum of 80 characters." ng-model="Currunt.outlet.suggested_dishes" required maxlength="80"> -->
+                                <textarea class="form-control" name="suggested_dishes" placeholder="list saprated by comma" ng-model="Currunt.outlet.suggested_dishes" required style="height: 50px;"></textarea>
+                            </div>
+                            <label class="error" for="suggested_dishes" ng-show="createOutletform.suggested_dishes.$invalid && !createOutletform.suggested_dishes.$pristine">This field is required.</label>
+                            <label class="error" for="suggested_dishes" ng-show="createOutletform.suggested_dishes.$error.minlength">One Liner should have at least 4 characters</label>
+                        </div>
+                    </div>                  
+                    <div class="clearfix"></div>
+                    <button class="btn btn-default m-t-30" ng-click="hideForms()">Cancel</button>
+                    <button class="btn btn-primary pull-right m-t-30" type="button" ng-click="createOutlet()" ng-disabled="(createOutletform.$invalid)" ng-hide="editing">Create a new Outlet</button>
+                    <button class="btn btn-primary pull-right m-t-r" ng-show="editing" ng-click="updateOutlet()">Update</button>
+                </form>
+              </div>
+              <!-- add Images -->
+              <div class="col-xs-12" ng-show="form5">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      add images to outlet
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div id="direct_upload" 
+                          ngf-drop="uploadFiles2($files)"
+                          ngf-drag-over-class="dragOverClass($event)"
+                          ng-model="files"
+                          ngf-max-size="1MB"
+                          ng-multiple="true">
+                          <div class="col-md-12">
+                            <form>  
+                              <div class="form_line">
+                                  <!-- <label>Image:</label> -->
+                                  <div class="form_controls">
+                                      <div class="upload_button_holder" style="text-align: center; border: 1px dotted #9e9e9e;padding: 20px;">
+                                          <div href="#" class="upload_button btn btn-fw btn-primary" ngf-select="uploadFiles2($files)" title="upload" resetOnClick="true" ngf-max-size="1MB" multiple>Upload (size < 1MB )</div>
+                                      </div>
+                                  </div>
+                              </div>
+                            </form>
+                            <h3>Images uploded: {{photos.length}}</h3>
+                          </div>
+                          <div class="col-md-12" style="padding: 10px">
+                            <div class="file" ng-repeat="file in files">
+                              <div class="col-md-6">
+                                <p class="grey-text">{{file.name}} {{f.$error}} {{f.$errorParam}}</p>
+                                <div class="status">{{file.status}}</div>
+                                
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: {{file.progress}}%" ng-init="progress=0"></div>
+                                </div>
+                            
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form_line">
+                                    <div class="form_controls">
+                                        <div class="preview">
+                                            <img ngf-src="file.result.url || file" style="width: 80%;">
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-12">
+                              <button class="btn red" ng-click="AddImagesoutlet = false; hideForms()">Cancel</button>
+                              <button class="btn btn-primary pull-right" style="margin-top: 40px;" ng-click="saveImagesToOutlet()" ng-disabled="saveImgBtnOutlet">save</button>
+                            </div>
+                          </div> 
+                        </div>
+                      </div>
+                     
+                      
+                    </div>
+                  </div>
+              </div>
+              <!-- create offer -->
+              <div class="col-xs-12" ng-show="form6">
+                <h2 ng-hide="editing">Create Offer</h2>
+                <h2 ng-show="editing">Update Offer</h2>
+                <form name="createOfferForm" id="form-createOfferForm" role="form" novalidate>
+                    <div class="row clearfix">
+                        <div class="col-sm-12">
+                            <label>Offer Type</label>
+                            <select class="cs-select cs-skin-slide" ng-model="Currunt.offer.offer_id"  cs-select>
+                                <option ng-repeat="item in default.defaultOffersList" value="{{item.id}}">{{item.title}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default input-group col-sm-10 p-r-0">
+                              <label>Start Date</label>
+                              <input type="text" class="form-control" placeholder="Pick a date" id="datepicker-component1" ui-jq="datepicker" data-format="YYYY-MM-DD" ng-model="Currunt.offer.start_date">
+                              <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                              </span>
+                          </div>
+                            <label class="error" for="cost" ng-show="createOfferForm.start_date.$invalid && !createOfferForm.start_date.$pristine">This field is required.</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default input-group col-sm-10 p-r-0">
+                              <label>End Date</label>
+                              <input type="text" class="form-control" placeholder="Pick a date" id="datepicker-component2" ui-jq="datepicker" data-format="YYYY-MM-DD" ng-model="Currunt.offer.end_date">
+                              <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                              </span>
+                          </div>
+                            <label class="error" for="end_date" ng-show="createOfferForm.start_date.$invalid && !createOfferForm.cost.$pristine">This field is required.</label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOfferForm.short_description.$invalid && !createOfferForm.short_description.$pristine }">
+                                <label>Offer Description</label>
+                                <textarea name="" class="form-control" name="short_description" placeholder="Offer Description" ng-model="Currunt.offer.short_description" required style="height: 50px;"></textarea>
+                            </div>
+                            <label class="error" for="short_description" ng-show="createOfferForm.short_description.$invalid && !createOfferForm.short_description.$pristine">This field is required.</label>
+                            <label class="error" for="short_description" ng-show="createOfferForm.short_description.$error.minlength">One Liner should have at least 4 characters</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : createOfferForm.description.$invalid && !createOfferForm.description.$pristine }">
+                                <label>Restaurant Description</label>
+                                <textarea name="" class="form-control" name="description" placeholder="Restaurant Description" ng-model="Currunt.offer.description" required style="height: 50px;"></textarea>
+                            </div>
+                            <label class="error" for="description" ng-show="createOfferForm.description.$invalid && !createOfferForm.description.$pristine">This field is required.</label>
+                            <label class="error" for="description" ng-show="createOfferForm.description.$error.minlength">One Liner should have at least 4 characters</label>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="direct_upload" 
+                            ngf-drop="uploadFiles($files)"
+                            ngf-drag-over-class="dragOverClass($event)"
+                            ng-model="files"
+                            ng-multiple="fasle" ngf-dimensions="$width == 640 && $height == 340">
+                            <div class="col-md-12 no-padding">
+                              <form>  
+                                <div class="form_line">
+                                    <!-- <label>Image:</label> -->
+                                    <div class="form_controls">
+                                        <div class="upload_button_holder" style="text-align: center; border: 1px dotted #9e9e9e;padding: 20px;width: 100%;">
+                                            <div href="#" class="upload_button btn btn-fw btn-primary" ngf-select="uploadFiles($files)" title="upload" resetOnClick="true" ngf-dimensions="$width == 640 && $height == 340">Upload</div>
+                                        </div>
+                                    </div>
+                                </div>
+                              </form>
+                            </div>
+                            <div class="col-sm-12 p-t-20">
+                              <div ng-repeat="file in files">
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width:{{file.progress}}%"></div>
+                                        </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>                  
+                    <div class="clearfix"></div>
+                    <button class="btn btn-default m-t-30" ng-click="hideForms()">Cancel</button>
+                    <button class="btn btn-primary pull-right m-t-30" type="button" ng-click="createOffer()" ng-disabled="(createOfferForm.$invalid) || (cover == '')" ng-hide="editing">Create offer</button>
+                    <button class="btn btn-primary pull-right m-t-30" ng-show="editing" ng-click="updateOffer()">Update</button>
+                </form>
+              </div>
+              <div class="col-xs-12 p-t-50" ng-show="form7">
+                <div class="col-sm-4">
+                  <button class="btn btn-default" ng-click="hideForms()">Done</button>
+                </div>
+                <div class="col-sm-4">
+                  <button class="btn btn-info" ng-click="openOutletOfferform()">Create New Offer</button>
+                </div>
+                <div class="col-sm-4">
+                  <button class="btn btn-complete" ng-click="opencreateOutletform()"> Create New Outlet</button>
+                </div>
+              </div>
+           </div>
+           <!-- restro Details -->
+           <div class="col-sm-12 m-t-30" ng-show="showDetails">
+               <div class="row">
+                    
+                    <div class="col-sm-3">
+                        <img ng-src="{{RestaurantData.card_image}}" alt="" class="img-responsive img-rounded">
+                        <!-- <button class="btn btn-icon no-border bg-transparent" style="position: absolute;top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,.8);"><i class="fa fa-edit fa-2x"></i></button> -->
+                        
+                    </div>
+                    <div class="col-sm-5">
+                        <button class="btn btn-link text-complete pull-right" ng-click="openRestroEdit()">edit</button>
+                        <button class="btn btn-link text-complete pull-right" ng-click="deleteRestro(RestaurantData.id, RestaurantData.is_disabled)">{{RestaurantData.is_disabled == '0' ? 'hide' : 'show'}}</button>
+                        <h3>{{RestaurantData.name}}</h3>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p class="hint-text m-t-0 m-b-5 bold fs-13">One Liner</p>
+                                <h5 class="semi-bold m-t-0">{{RestaurantData.one_liner}}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p class="hint-text m-t-0 m-b-5 bold fs-13">Cost For one</p>
+                                <h5 class="semi-bold m-t-0">{{RestaurantData.cost}}</h5>
+                            </div>
+                        </div>
+                      <div class="row">
+                        <div class="col-xs-6">
+                          <p class="hint-text m-t-0 m-b-5 bold fs-13">Total Rating (users)</p>
+                          <h5 class="semi-bold m-t-0">{{RestaurantData.rating.total_rating}}</h5>
+                        </div>
+                        <div class="col-xs-6">
+                          <p class="hint-text m-t-0 m-b-5 bold fs-13">Avg Rate</p>
+                          <h5 class="semi-bold m-t-0">{{RestaurantData.rating.rating_avg}}</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <button class="btn btn-link text-complete pull-right" ng-hide="noCusine" ng-click="$parent.openViaDetails= true; openCuisineForm()">edit</button>
+
+                        <button class="btn btn-success m-t-60" ng-show="noCusine" ng-click="$parent.openViaDetails= true; openCuisineForm()">
+                            Add Cuisine
+                        </button>
+                        <div class="text-left m-t-20" ng-hide="noCusine">
+                            <p class="hint-text m-t-0 m-b-5 bold fs-13">Cuisines</p>
+                            <p class="semi-bold m-t-0 m-b-5 fs-15" ng-repeat="cuisine in RestaurantData.cuisine">{{cuisine.title}} 
+                            <span ng-click="$parent.openViaDetails= true; primaryButtonClick(cuisine.id);" ng-disabled="{{cuisine.id == RestaurantData.primary_cuisine.id }}" style="cursor: pointer;"><i class="fa fa-star {{cuisine.id == RestaurantData.primary_cuisine.id ? 'gold' : 'off-white'}}" aria-hidden="true" ></i></span>
+
+                            <span ng-click="deletecusine(cuisine.id)" style="cursor: pointer;margin-left: 7px;"><i class="fa fa-trash-o" aria-hidden="true" ></i></span>
+                            </p>
+                        </div>
+                    </div>
+               </div>
+               <div class="row m-t-20" ng-hide="noOutlet">
+                   <div class="col-sm-12">
+                       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default" ng-repeat="outlets in RestaurantData.outlets">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                    <h4 class="panel-title">
+                                    <a ng-class="{collapsed:!collapseOne}" ng-click="collapseOne=!collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                     {{outlets.name}}, {{outlets.area}} <span class="bold">( {{outlets.pin}} )</span>
+                                     <span class="{{outlets.is_disabled == '0' ? 'hide': ''}}">
+                                       <i class="fa fa-ban text-danger"></i>
+                                     </span>
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" ng-class="{in:collapseOne}">
+                                    <div class="panel-body">
+                                        <div class="col-sm-12 m-b-10">
+                                          <button class="btn btn-link text-complete pull-right" ng-click="openOutletEdit(outlets)">edit</button>
+                                          <button class="btn btn-link text-complete pull-right" ng-click="deleteOutlet(outlets.id, outlets.is_disabled)">{{outlets.is_disabled == '0' ? 'hide' : 'show'}}</button>
+                                          
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <div class="row">
+                                              <div class="col-xs-6">
+                                                <p class="hint-text m-t-0 m-b-5 bold fs-13">City Id</p>
+                                                <p class="semi-bold m-t-0 m-b-5 fs-15" >{{outlets.city_id}}</p>
+                                              </div>
+                                              <div class="col-xs-6">
+                                                <p class="hint-text m-t-0 m-b-5 bold fs-13">City Zone Id</p>
+                                                <p class="semi-bold m-t-0 m-b-5 fs-15" >{{outlets.city_zone_id}}</p>
+                                              </div>
+                                              <div class="col-xs-6">
+                                                <p class="hint-text m-t-0 m-b-5 bold fs-13">Latitude</p>
+                                                <p class="semi-bold m-t-0 m-b-5 fs-15" >{{outlets.latitude}}</p>
+                                              </div>
+                                              <div class="col-xs-6">
+                                                <p class="hint-text m-t-0 m-b-5 bold fs-13">Longitude</p>
+                                                <p class="semi-bold m-t-0 m-b-5 fs-15" >{{outlets.longitude}}</p>
+                                              </div>
+                                              <div class="col-xs-6">
+                                                <p class="hint-text m-t-0 m-b-5 bold fs-13">Work hours</p>
+                                                <p class="semi-bold m-t-0 m-b-5 fs-15" >{{outlets.work_hours}}</p>
+                                              </div>
+                                              <div class="col-xs-6">
+                                                <p class="hint-text m-t-0 m-b-5 bold fs-13">Suggested Dishes</p>
+                                                <p class="semi-bold m-t-0 m-b-5 fs-15" >{{outlets.suggested_dishes}}</p>
+                                              </div>
+                                              <div class="col-xs-6">
+                                                <p class="hint-text m-t-0 m-b-5 bold fs-13">Total Rating (users)</p>
+                                                <p class="semi-bold m-t-0 m-b-5 fs-15" >{{outlets.rating.total_rating}}</p>
+                                              </div>
+                                              <div class="col-xs-6">
+                                                <p class="hint-text m-t-0 m-b-5 bold fs-13">Avg Rate</p>
+                                                <p class="semi-bold m-t-0 m-b-5 fs-15" >{{outlets.rating.rating_avg}}</p>
+                                              </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <!-- START PANEL -->
+                                            <div class="panel panel-transparent">
+                                                <div class="panel-heading">
+                                                    <div class="panel-title hint-text">Address
+                                                    </div>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <address class="margin-bottom-20 margin-top-10">
+                                                        <strong>{{outlets.name}}</strong>
+                                                        <br>{{outlets.address}}
+                                                        <br>Postcode: {{outlets.postcode}}
+                                                        <br>
+                                                        <abbr title="Phone">P:</abbr>{{outlets.phone}}
+                                                    </address>
+                                                </div>
+                                            </div>
+                                            <!-- END PANEL -->
+                                        </div>
+                                        <div class="col-sm-12 m-t-15">
+                                            <h5>Images <span class="m-l-20" style="cursor: pointer;" ng-click="$parent.openViaDetails= true; addImagebutton(outlets.id)"><i class="fa fa-plus-square-o"></i></span></h5>
+                                            <div class="col-sm-2" style="padding: 5px;" ng-repeat="images in outlets.images">
+                                                <img ng-src="{{images.url}}" alt="" class="img-responsive img-rounded">
+                                                <button class="btn btn-icon no-border bg-transparent" ng-click="deleteImage(images.id,outlets.id )" style="position: absolute;top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,.8);"><i class="fa fa-trash-o fa-2x"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                          <h5>Offers <span class="m-l-20" style="cursor: pointer;" ng-click="$parent.openViaDetails= true; createOfferbutton(outlets.id)"><i class="fa fa-plus-square-o"></i></span></h5>
+                                          <div class="panel-body">
+                                            <table class="table table-hover demo-table-dynamic">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Type</th>
+                                                        <th>Actions</th>
+                                                        <!-- <th></th> -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                      <tr ng-repeat="offer in outlets.offer[0]">
+                                                        <td class="v-align-middle">
+                                                            <p>{{offer.title}}</p>
+                                                        </td>
+                                                        <td class="v-align-middle">
+                                                            <p>{{offer.type}}</p>
+                                                        </td>
+                                                        <td>
+                                                          <div class="col-sm-6 p-l-5 p-r-5">
+                                                            <button class="btn btn-sm btn-warning pull-right" ng-click="openOfferEdit(offer.pivot.id)">edit</button>
+                                                          </div>
+                                                          <div class="col-sm-6 p-l-5 p-r-5">
+                                                            <button class="btn btn-sm {{offer.pivot.is_disabled == '0' ? 'btn-danger' : 'btn-success'}} pull-right" ng-click="deleteoffer(offer.pivot.id, offer.pivot.is_disabled)">{{offer.pivot.is_disabled == '0' ? 'hide' : 'show'}}</button>
+                                                          </div>
+                                                        </td>
+                                                        <!-- <td><button class="btn btn-default" ng-click="deleteoffercompletly(offer.pivot.id)">
+                                                          <i class="fa fa-trash"></i>
+                                                        </button></td> -->
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <h5>
+                                                Redeemed Offers
+                                                <span class="pull-right m-l-20">
+                                                    <button class="pull-right btn btn-info btn-block" ng-csv="outlets.usercsv" filename="user-list.csv" field-separator=","
+                                                            decimal-separator=".">Download User List
+                                                    </button>
+                                                </span>
+                                            </h5>
+                                            <div class="panel-body">
+                                                <table class="table table-hover demo-table-dynamic">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Id</th>
+                                                        <th>User Name</th>
+                                                        <th>Offer Title</th>
+                                                        <th>Redemption Time</th>
+                                                        <!-- <th></th> -->
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="redeem in outlets.Redeemed[0]">
+                                                        <td class="v-align-middle">
+                                                            <p>{{redeem.id}}</p>
+                                                        </td>
+                                                        <td class="v-align-middle">
+                                                            <p>{{redeem.user}}</p>
+                                                        </td>
+                                                        <td class="v-align-middle">
+                                                            <p>{{redeem.title}}</p>
+                                                        </td>
+                                                        <td class="v-align-middle">
+                                                            <p>{{redeem.created_at}}</p>
+                                                        </td>
+
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   </div>
+               </div>
+               <div class="row">
+                   <div class="col-sm-12 m-t-20 m-b-20">
+                       <button class="btn btn-default btn-block text-complete" ng-click="$parent.openViaDetails= true; opencreateOutletform()">Add Outlet</button>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+        <div class="col-xs-12 m-t-30" style="">
+            <!-- <h5 class="m-l-20">Get Data from</h5> -->
+            <div class="col-sm-6">
+                <div class="col-sm-6">
+                    <div id="datepicker-component" class="input-group date col-sm-12" ui-jq="datepicker">
+                        <input type="text" class="form-control" placeholder="Start Date" ng-model="startdate"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div id="datepicker-component" class="input-group date col-sm-12" ui-jq="datepicker">
+                        <input type="text" class="form-control" placeholder="End Date" ng-model="enddate"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-info" ng-click="getTransectionsByDate()">Get Details</button>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-complete pull-right" ng-csv="usercsv" filename="Transections.csv" field-separator="," decimal-separator="." title="download csv">Download Csv</button>
+            </div>
+        </div>
+        <div class="col-md-12" ng-if="txnHistory">
+            <!-- START PANEL -->
+            <div class="panel panel-transparent">
+                <div class="panel-heading">
+                    <div class="panel-title">Transection History
+                    </div>
+                    <div class="tools">
+                        <a class="collapse" href="javascript:;"></a>
+                        <a class="config" data-toggle="modal" href="#grid-config"></a>
+                        <a class="reload" href="javascript:;"></a>
+                        <a class="remove" href="javascript:;"></a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="stripedTable" ui-jq="dataTable" ui-options="options">
+                            <thead>
+                                <tr>
+                                    <!-- NOTE * : Inline Style Width For Table Cell is Required as it may differ from user to user 
+                                        Comman Practice Followed
+                                        -->
+                                    <th style="width:30%">Title</th>
+                                    <th style="width:4%">Amount</th>
+                                    <th style="width:4%">Txn Id</th>
+                                    <th style="width:3%">User Id</th>
+                                    <th style="width:4%">User Name</th>
+                                    <th style="width:5%">User Email</th>
+                                    <th style="width:4%">User Phone</th>
+                                    <th style="width:30%">Order Id</th>
+                                    <th style="width:15%">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in txnHistory">
+                                    <td class="v-align-middle bold">{{item.title}}</td>
+                                    <td class="v-align-middle bold">{{item.txn_amount}}</td>
+                                    <td class="v-align-middle semi-bold">{{item.txn_id}}</td>
+                                    <td class="v-align-middle bold">{{item.user_id}}</td>
+                                    <td class="v-align-middle semi-bold">{{item.name}}</td>
+                                    <td class="v-align-middle semi-bold">{{item.email}}</td>
+                                    <td class="v-align-middle semi-bold">{{item.phone}}</td>
+                                    <td class="v-align-middle semi-bold">{{item.order_id}}</td>
+                                    <td class="v-align-middle semi-bold">{{item.created_at}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- END PANEL -->
+        </div>
+        
+    </div>
+</div>

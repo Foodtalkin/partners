@@ -1,0 +1,67 @@
+/*
+
+* Override Pages default styles or create your own styles here
+
+*/
+.gold{
+  color:  #D4AF37;
+}
+.off-white{
+  color: #e8dada;
+}
+.card-description1{
+        background: rgba(0,0,0,.65);
+        color: #fff;
+        padding: 10px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      .no-t-b-border{
+        border-top: 0;
+        border-bottom:0;
+      }
+      .border-t-radius{
+        border-radius: 2px 2px 0 0;
+      }
+     
+      .Experincedatapoints:hover, .Experincedatapoints:active{
+        color: #6d5cae;
+      }
+      .card{
+        width: 100%;
+      }
+      
+
+      .flex-box{
+        display: flex;
+  align-items: center;
+  justify-content: center;
+      }
+
+      .flex-content{
+        display: flex;
+  justify-content: center;
+      }
+
+
+.multibar .nvtooltip.xy-tooltip h1,.multibar .nvtooltip.xy-tooltip h2,
+.multibar .nvtooltip.xy-tooltip h3, .multibar .nvtooltip.xy-tooltip h4,
+.multibar .nvtooltip.xy-tooltip h5,.multibar .nvtooltip.xy-tooltip h6{
+  font-size: 12px;
+}
+
+.hide{
+  display: none;
+}
+
+.liveEventsData .row.bold {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.liveEventsData {
+    height: 380px !important;
+    overflow-y: scroll;
+}
