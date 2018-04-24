@@ -1,10 +1,49 @@
 
 <div class="container-fluid container-fixed-lg" style="">
    <div class="row">
-       <div class="col-md-4" style="border-right: 1px solid rgba(230, 230, 230, 0.7); height: calc(100vh - 135px);">
+       <div class="col-md-12" style="border-right: 1px solid rgba(230, 230, 230, 0.7); height: calc(100vh - 135px);">
            <div class="p-t-30 p-b-10">
               <h5>Contact</h5>
 
+               <div class="panel panel-transparent">
+                   <div class="panel-body no-padding">
+                       <form name="newContact" id="form-contact" role="form" novalidate>
+                           <div class="row">
+                               <div class="col-sm-6">
+                                   <div class="row">
+                                       <div class="col-sm-6">
+                                           <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : newContact.email.$invalid && !newContact.email.$pristine }">
+                                               <label>Email</label>
+                                               <input type="email" class="form-control" name="email" placeholder="Jhonedoe@gmail.com" ng-model="contact.email" required>
+                                           </div>
+                                           <label class="error" for="email" ng-show="newContact.email.$invalid && !newContact.email.$pristine">This field is required.</label>
+                                       </div>
+
+                                       <div class="col-sm-6">
+                                           <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : newContact.contact.$invalid && !newContact.contact.$pristine }">
+                                               <label>Contact No.</label>
+                                               <input type="tel" class="form-control" name="contact" placeholder="0123456789" ng-model="contact.contact" required>
+                                           </div>
+                                           <label class="error" for="contact" ng-show="newContact.contact.$invalid && !newContact.contact.$pristine">This field is required.</label>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-sm-12">
+                                           <div pg-form-group class="form-group form-group-default required" ng-class="{ 'has-error' : newContact.message.$invalid && !newContact.message.$pristine }">
+                                               <label>Contact No.</label>
+                                               <textarea class="form-control" name="message" placeholder="Type the message you wish to send" ng-model="contact.message" style="height:100px" required></textarea>
+                                           </div>
+                                           <label class="error" for="contact" ng-show="newContact.message.$invalid && !newContact.message.$pristine">This field is required.</label>
+                                       </div>
+                                   </div>
+                                   <div class="sm-p-t-10 clearfix">
+                                       <button class="btn btn-primary" type="submit" ng-disabled="(newContact.$invalid) || (isDisabled)" ng-click="createContact()">Submit</button>
+                                   </div>
+                               </div>
+                           </div>
+                       </form>
+                   </div>
+               </div>
            </div>
 
        </div>

@@ -185,18 +185,18 @@ angular.module('app')
         var live = "http://api.foodtalk.in/";
 
         // change before pushing online
-        var baseurl = local;
+        var baseurl = live;
 
         UrlFact.login = baseurl + "partners/login";
         UrlFact.logOut = baseurl + "partners/logout";
+
+        UrlFact.contact = baseurl + "contact";
 
         UrlFact.appfeed = {};
         UrlFact.appfeed.redmption = baseurl + "privilege/feeds/redeemptions";
         UrlFact.appfeed.purchase = baseurl + "privilege/feeds/purchases";
         UrlFact.appfeed.eventPurchase = baseurl + "privilege/feeds/event-purchases";
         UrlFact.appfeed.signup = baseurl + "privilege/feeds/signups";
-
-        UrlFact.contact = baseurl + "contact";
 
         UrlFact.experience = {};
         UrlFact.experience.main = baseurl + "privilege/experiences";
