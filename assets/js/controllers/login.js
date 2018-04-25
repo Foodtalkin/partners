@@ -17,6 +17,7 @@ angular.module('app')
 					$cookies['batman'] = response.data.result;
                     $cookies['APPSESSID'] = response.data.result.APPSESSID;
                     $cookies['restaurant'] = response.data.result.name;
+                    $cookies['restaurant_id'] = response.data.result.id;
                     $cookies['partner_pin'] = response.data.result.partner_pin;
 					callback(true);
 				}else{

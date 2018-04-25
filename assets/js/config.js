@@ -46,20 +46,41 @@ angular.module('app')
                 })
                 .state('app.home', {
                     url: "/home",
-                    templateUrl: "tpl/home.html",
-                    controller: 'HomeCtrl',
+                    templateUrl: "tpl/dashboard.html",
+                    controller: 'dashboardCtrl',
                     resolve: {
                         deps: ['$ocLazyLoad', function($ocLazyLoad) {
                             return $ocLazyLoad.load([
-                                    'nvd3',
-                                    'rickshaw',
-                                    'sparkline'
+                                    //'nvd3',
+                                    //'rickshaw',
+                                    //'sparkline'
                                 ], {
                                     insertBefore: '#lazyload_placeholder'
                                 })
                                 .then(function() {
                                     return $ocLazyLoad.load([
-                                        'assets/js/controllers/home.js'
+                                        'assets/js/controllers/dashboard.js'
+                                    ]);
+                                });
+                        }]
+                    }
+                })
+                .state('app.outlet', {
+                    url: '/outlet/:id',
+                    templateUrl: "tpl/outlet.html",
+                    controller: 'outletCtrl',
+                    resolve: {
+                        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                //'nvd3',
+                                //'rickshaw',
+                                //'sparkline'
+                            ], {
+                                insertBefore: '#lazyload_placeholder'
+                            })
+                                .then(function() {
+                                    return $ocLazyLoad.load([
+                                        'assets/js/controllers/outlet.js'
                                     ]);
                                 });
                         }]
@@ -191,6 +212,9 @@ angular.module('app')
         UrlFact.logOut = baseurl + "partners/logout";
 
         UrlFact.contact = baseurl + "contact";
+
+        UrlFact.restaurant = baseurl + 'partners/restaurant';
+        UrlFact.outlet = baseurl + 'partners/outlet/';
 
         UrlFact.appfeed = {};
         UrlFact.appfeed.redmption = baseurl + "privilege/feeds/redeemptions";

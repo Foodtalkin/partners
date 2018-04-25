@@ -1,41 +1,49 @@
-    <div class="page-sidebar" data-pages="sidebar" pg-sidebar>
-      <div id="appMenu" class="sidebar-overlay-slide from-top">
-      </div>
-      <!-- BEGIN SIDEBAR HEADER -->
-      <div class="sidebar-header">
-        <img src="assets/img/logo_white.png" alt="logo" class="brand" data-src="assets/img/logo_white.png" data-src-retina="assets/img/logo_white_2x.png" height="22">
+<div class="page-sidebar" data-pages="sidebar" pg-sidebar>
+    <div id="appMenu" class="sidebar-overlay-slide from-top">
+    </div>
+    <!-- BEGIN SIDEBAR HEADER -->
+    <div class="sidebar-header">
+        <img src="assets/img/logo_white.png" alt="logo" class="brand" data-src="assets/img/logo_white.png"
+             data-src-retina="assets/img/logo_white_2x.png" height="22">
         <div class="sidebar-header-controls">
-          <!-- <button type="button" class="btn btn-xs sidebar-slide-toggle btn-link m-l-20" data-pages-toggle="#appMenu"><i class="fa fa-angle-down fs-16"></i>
-          </button> -->
-          <button type="button" class="btn btn-link visible-lg-inline" data-toggle-pin="sidebar"><i class="fa fs-12"></i>
-          </button>
+            <!-- <button type="button" class="btn btn-xs sidebar-slide-toggle btn-link m-l-20" data-pages-toggle="#appMenu"><i class="fa fa-angle-down fs-16"></i>
+            </button> -->
+            <button type="button" class="btn btn-link visible-lg-inline" data-toggle-pin="sidebar"><i
+                class="fa fs-12"></i>
+            </button>
         </div>
-      </div>
-      <!-- END SIDEBAR HEADER -->
-      <!-- BEGIN SIDEBAR MENU -->
-      <div class="sidebar-menu">
+    </div>
+    <!-- END SIDEBAR HEADER -->
+    <!-- BEGIN SIDEBAR MENU -->
+    <div class="sidebar-menu">
         <ul class="menu-items">
-          <li class="m-t-30" ui-sref-active="active">
-            <a ui-sref="app.home" class="">
-              <span class="title">Home</span>
-            </a>
-            <span class="icon-thumbnail "><i class="fa fa-home"></i></span>
-          </li>
-          <li class="" ui-sref-active="active">
-            <a ui-sref="app.contact" class="">
-              <span class="title">Contact</span>
-            </a>
-            <span class="icon-thumbnail "><i class="fa fa-phone-square" aria-hidden="true"></i></span>
-          </li>
-          <li class="" ui-sref-active="active">
-            <a href="#" ng-click="logOut()">
-              <span class="title">Logout</span>
-            </a>
-            <span class="icon-thumbnail "><i class="fa fa-sign-out" aria-hidden="true"></i></span>
-          </li>
+            <li class="m-t-30" ui-sref-active="active">
+                <a ui-sref="app.home" class="">
+                    <span class="title">Home</span>
+                </a>
+                <span class="icon-thumbnail "><i class="fa fa-home"></i></span>
+                <ul class="sub-menu">
+                    <li ng-repeat="outlet in outlets">
+                        <a ui-sref="app.outlet({id: outlet.id})" ui-sref="app.outlet({id: outlet.id})"> {{ outlet.name }}</a>
+                        <span class="icon-thumbnail">{{ outlet.id }}</span>
+                    </li>
+                </ul>
+            </li>
+            <li class="" ui-sref-active="active">
+                <a ui-sref="app.contact" class="">
+                    <span class="title">Contact</span>
+                </a>
+                <span class="icon-thumbnail "><i class="fa fa-phone-square" aria-hidden="true"></i></span>
+            </li>
+            <li class="" ui-sref-active="active">
+                <a href="#" ng-click="logOut()">
+                    <span class="title">Logout</span>
+                </a>
+                <span class="icon-thumbnail "><i class="fa fa-sign-out" aria-hidden="true"></i></span>
+            </li>
         </ul>
         <div class="clearfix"></div>
-      </div>
-      <!-- END SIDEBAR MENU -->
     </div>
-    <!-- END SIDEBAR
+    <!-- END SIDEBAR MENU -->
+</div>
+<!-- END SIDEBAR

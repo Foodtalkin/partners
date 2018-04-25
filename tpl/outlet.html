@@ -1,0 +1,47 @@
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-transparent">
+                <div class="panel-body no-padding">
+                    <h4>Outlet: {{ currentOutlet.name }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading ">
+                    <div class="panel-title">Available Offers</div>
+                    <div class="panel-controls">
+                        <ul>
+                            <li>
+                                <i class="portlet-icon portlet-icon-refresh"></i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel-body no-padding">
+                    <table class="table table-hover demo-table-dynamic">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="offer in currentOutlet.offer">
+                                <td class="v-align-middle">
+                                    <p>{{offer.title}}</p>
+                                </td>
+                                <td class="v-align-middle">
+                                    <p>{{offer.type}}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

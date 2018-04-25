@@ -4,7 +4,8 @@
  * ============================================================ */
 
 angular.module('app')
-    .controller('AppCtrl', ['$scope', '$rootScope', '$state','Idle','$location', 'appFact', function($scope, $rootScope, $state,Idle, $location, appFact) {
+    .controller('AppCtrl', ['$scope', '$rootScope', '$state','Idle','$location', 'appFact', '$cookies',
+        function($scope, $rootScope, $state,Idle, $location, appFact, $cookies) {
 
         // App globals
         $scope.app = {
@@ -93,6 +94,18 @@ angular.module('app')
             })
         }
 
+        $scope.outlets = {};
+        $scope.restaurant = {}
+
+        $scope.getRestaurantDetails = function () {
+            if ($cookies['APPSESSID'] && $cookies['restaurant_id']) {
+                appFact.getRestaurantDetails(function (response) {
+                    $scope.restaurant = response.data.result;
+                    $scope.outlets = response.data.result.outlet;
+                });
+            }
+        }
+        $scope.getRestaurantDetails();
     }])
     .factory('appFact', ['$http','$cookies', 'UrlFact',
         function($http, $cookies, UrlFact){
@@ -111,6 +124,12 @@ angular.module('app')
                         callback(false);
                     }
                 });
+            }
+
+            appFact.getRestaurantDetails = function  (callback) {
+                $http.get(UrlFact.restaurant).then(function (response) {
+                    callback(response);
+                })
             }
 
             return appFact;
