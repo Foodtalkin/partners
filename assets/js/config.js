@@ -51,9 +51,9 @@ angular.module('app')
                     resolve: {
                         deps: ['$ocLazyLoad', function($ocLazyLoad) {
                             return $ocLazyLoad.load([
-                                    //'nvd3',
-                                    //'rickshaw',
-                                    //'sparkline'
+                                    'nvd3',
+                                    'rickshaw',
+                                    'sparkline'
                                 ], {
                                     insertBefore: '#lazyload_placeholder'
                                 })
@@ -72,9 +72,12 @@ angular.module('app')
                     resolve: {
                         deps: ['$ocLazyLoad', function($ocLazyLoad) {
                             return $ocLazyLoad.load([
-                                //'nvd3',
-                                //'rickshaw',
-                                //'sparkline'
+                                'nvd3',
+                                'rickshaw',
+                                'sparkline',
+                                'moment',
+                                'datepicker',
+                                'daterangepicker'
                             ], {
                                 insertBefore: '#lazyload_placeholder'
                             })
@@ -216,50 +219,7 @@ angular.module('app')
         UrlFact.restaurant = baseurl + 'partners/restaurant';
         UrlFact.outlet = baseurl + 'partners/outlet/';
 
-        UrlFact.appfeed = {};
-        UrlFact.appfeed.redmption = baseurl + "privilege/feeds/redeemptions";
-        UrlFact.appfeed.purchase = baseurl + "privilege/feeds/purchases";
-        UrlFact.appfeed.eventPurchase = baseurl + "privilege/feeds/event-purchases";
-        UrlFact.appfeed.signup = baseurl + "privilege/feeds/signups";
-
-        UrlFact.experience = {};
-        UrlFact.experience.main = baseurl + "privilege/experiences";
-        UrlFact.experience.data = baseurl + "privilege/experiences/data";
-        UrlFact.experience.sortdata = baseurl + "privilege/experiences/sort_data/";
-        UrlFact.experience.refund = baseurl + "privilege/refund/"
-
-        UrlFact.home = {};
-        UrlFact.home.user = baseurl + "/privilege/analytics/user/";
-        UrlFact.home.redemption = baseurl + "/privilege/analytics/redemption/";
-        UrlFact.home.restaurants = baseurl + "/privilege/analytics/restaurants/";
-        UrlFact.home.topuser = baseurl + "/privilege/analytics/topuser/";
-
-
-
-        UrlFact.notification = baseurl + "privilege/push";
-
-        UrlFact.privilege = {};
-        UrlFact.privilege.restaurant = baseurl + "privilege/restaurant";
-        UrlFact.privilege.outlet = baseurl + "privilege/outlet";
-        UrlFact.privilege.outletRedeemedReport = baseurl + "privilege/outlet/redeemed-report";
-        UrlFact.privilege.cuisine = baseurl + "privilege/cuisine";
-        UrlFact.privilege.outletOffer = baseurl + "privilege/outlet-offer";
-        UrlFact.privilege.offer = baseurl + "privilege/offer";
-        UrlFact.privilege.userReport = baseurl + "privilege/analytics/user-csv";
-
-        UrlFact.transactions = baseurl + "privilege/transactions";
-
-        UrlFact.user = baseurl + "privilege/user";
-        UrlFact.privilege.salesRevenue = baseurl + "privilege/analytics/sales-revenue";
-
-        UrlFact.privilege.liveEvents = baseurl + "privilege/details/live-events";
-        UrlFact.privilege.valuableUsers = baseurl + "privilege/analytics/valuable-users";
-        UrlFact.privilege.onboardedUsersCount = baseurl + "privilege/analytics/onboarded-users-count";
-        UrlFact.privilege.couponOnBoardPieChart = baseurl + "privilege/analytics/coupon-boarded-pie-chart";
-        UrlFact.privilege.restaurantRating = baseurl + "privilege/analytics/restaurant-rating";
-        UrlFact.privilege.userSubscriptionState = baseurl + "privilege/analytics/user-state";
-
-        UrlFact.coupon = baseurl + "privilege/coupons";
+        UrlFact.redemption = baseurl + "/partners/redemption/";
 
         return UrlFact;
     })

@@ -24,7 +24,7 @@
                 <span class="icon-thumbnail "><i class="fa fa-home"></i></span>
                 <ul class="sub-menu">
                     <li ng-repeat="outlet in outlets">
-                        <a ui-sref="app.outlet({id: outlet.id})" ui-sref="app.outlet({id: outlet.id})"> {{ outlet.name }}</a>
+                        <a ui-sref="app.outlet({id: outlet.id})" ui-sref="app.outlet({id: outlet.id})"> {{ outlet.name }} - {{ outlet.area }}</a>
                         <span class="icon-thumbnail">{{ outlet.id }}</span>
                     </li>
                 </ul>

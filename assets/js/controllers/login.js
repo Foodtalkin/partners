@@ -45,6 +45,7 @@ angular.module('app')
     		LoginFact.doLogin($scope.partner.pin, $scope.partner.password, function(response){
     			if (response) {
     				$location.path('/app/home');
+    				window.location.reload(true)
     			} else {
                     alert("Invalid Pin Or Password");
                 }

@@ -88,6 +88,7 @@ angular.module('app')
 
         $scope.logOut = function(){
             appFact.LogOut(function(response){
+                $scope.outlets = {};
                 if(response){
                     $location.path('/access/login');
                 }
